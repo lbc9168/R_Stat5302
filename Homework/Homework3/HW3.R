@@ -20,3 +20,39 @@ points(log(PollenRemoved/(1-PollenRemoved)) ~ log(DurationOfVisit), subset=(BeeT
 points(log(PollenRemoved/(1-PollenRemoved)) ~ log(DurationOfVisit), subset=(BeeType == "Worker"), pch =15, data=bee)
 
 ## d
+summary(lm(log(PollenRemoved/(1-PollenRemoved)) ~ log(DurationOfVisit), data = bee))
+summary(lm(log(PollenRemoved/(1-PollenRemoved)) ~ log(DurationOfVisit) + BeeType, data = bee))
+summary(lm(log(PollenRemoved/(1-PollenRemoved)) ~ log(DurationOfVisit) + BeeType + log(DurationOfVisit):BeeType, data = bee))
+
+## e
+## scripts same as d
+
+
+## question 22
+animal = read.csv("ex0826 (1).csv")
+# a matrix of pairwise scatterplots
+pairs(~ Metab+Mass+Life, data = animal)
+pairs(~ log(Metab) + log(Mass) + log(Life), data = animal)
+
+summary(lm(log(Life) ~ log(Mass)+log(Metab), data = animal))
+attach(animal)
+cor(Metab,Mass)
+
+## subquestion1
+fit.noMetab = lm(Life ~ Mass, data = animal)
+fit.Metab = lm(Life ~ Mass + Metab, data = animal)
+anova(fit.noMetab,fit.Metab)
+
+## subquestion2,3
+summary(lm(Life ~ Mass + Metab, data = animal))
+summary(lm(log(Life) ~ log(Mass), data = animal))
+summary(lm(log(Life) ~ log(Mass) + log(Metab), data = animal))
+summary(lm(log(Life) ~ log(Mass) + log(Metab):CommonName, data = animal))
+
+
+## question 23
+income = read.csv("ex0923.csv")
+head(income)
+pairs(~ AFQT + Educ + Income2005 + Gender, data = income)
+summary(lm(Income2005 ~ AFQT + Educ + Gender, data = income))
+summary(lm(Income2005 ~ AFQT + Educ + Gender + AFQT:Gender + Educ:Gender, data = income))
