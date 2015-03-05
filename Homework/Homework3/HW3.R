@@ -48,11 +48,14 @@ summary(lm(Life ~ Mass + Metab, data = animal))
 summary(lm(log(Life) ~ log(Mass), data = animal))
 summary(lm(log(Life) ~ log(Mass) + log(Metab), data = animal))
 summary(lm(log(Life) ~ log(Mass) + log(Metab):CommonName, data = animal))
+summary(lm(Life ~ Mass + Metab, data = animal))
+summary(lm(Life ~ Metab, data = animal))
+summary(lm(log(Life) ~ log(Metab), data = animal))
 
 
 ## question 23
 income = read.csv("ex0923.csv")
 head(income)
-pairs(~ AFQT + Educ + Income2005 + Gender, data = income)
-summary(lm(Income2005 ~ AFQT + Educ + Gender, data = income))
-summary(lm(Income2005 ~ AFQT + Educ + Gender + AFQT:Gender + Educ:Gender, data = income))
+pairs(~ AFQT + Educ + log(Income2005) + Gender, data = income)
+summary(lm(log(Income2005) ~ AFQT + Educ + as.factor(Gender), data = income))
+summary(lm(log(Income2005) ~ AFQT + Educ + Gender + AFQT:Gender + Educ:Gender, data = income))
