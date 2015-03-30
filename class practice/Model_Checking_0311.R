@@ -1,0 +1,11 @@
+bodyfat = c(19.5,43.1,29.1,11.9,24.7,49.8,28.2,22.8,30.7,51.9,37.0,18.7,29.8,54.3,31.1,20.1,19.1,42.2,30.9,12.9,25.6,53.9,23.7,21.7)
+bodyfat = data.frame(matrix(bodyfat,byrow = T, ncol = 4))
+names(bodyfat) = c("triceps", "thigh", "midarm", "bodyfat")
+head(bodyfat)
+plot(bodyfat)
+cor(bodyfat)
+fit.triceps = lm(bodyfat ~ triceps, data = bodyfat)
+res.triceps = resid(fit.triceps)
+res.triceps
+summary(fit.triceps)
+plot(res.triceps)
