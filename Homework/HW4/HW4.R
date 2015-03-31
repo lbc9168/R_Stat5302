@@ -1,3 +1,5 @@
+setwd("F:/Bingcai Liu/GitHub/R_Stat5302/Homework/HW4")
+
 ## 10.9
 
 qt(0.975,22)
@@ -37,12 +39,28 @@ plot(Math,log10(Income2005))
 
 MA.lm = lm(log10(Income2005) ~ Math + Arith)
 summary(MA.lm)
+plot(resid(MA.lm))
 
 MW.lm = lm(log10(Income2005) ~ Math + Word)
 summary(MW.lm)
 
 MP.lm = lm(log10(Income2005) ~ Math + Parag)
 summary(MP.lm)
+plot(resid(MP.lm))
 
 MAW.lm = lm(log10(Income2005) ~ Math + Arith + Word)
 summary(MAW.lm)
+plot(resid(MAW.lm))
+
+MAP.lm = lm(log10(Income2005) ~ Math + Arith + Parag)
+summary(MAP.lm)
+plot(resid(MAP.lm))
+
+ALL.lm = lm(log10(Income2005) ~ Arith + Word + Parag + Math + AFQT)
+summary(ALL.lm)
+plot(resid(ALL.lm))
+
+anova(MAP.lm,MA.lm)
+anova(MA.lm,MAP.lm)
+anova(MA.lm,MAW.lm)
+anova(AWPM.lm,MA.lm)
