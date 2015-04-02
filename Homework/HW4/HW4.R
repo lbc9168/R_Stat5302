@@ -34,6 +34,8 @@ AWPM.lm = with(ex1033,lm(log10(Income2005) ~ Arith + Word + Parag + Math))
 summary(AWPM.lm)
 
 attach(ex1033)
+detach(ex1033)
+
 M.lm = lm(log10(Income2005) ~ Math) 
 summary(M.lm)
 plot(Math,log10(Income2005))
@@ -67,3 +69,6 @@ anova(MA.lm,MAW.lm)
 anova(AWPM.lm,MA.lm)
 
 step(AWPM.lm, direction = "backward", test = "F")
+
+three.lm = lm(log10(Income2005) ~ Math + Arith + AFQT)
+summary(three.lm)
