@@ -29,6 +29,7 @@ cor(ex1033)
 
 AFQT.lm = with(ex1033,lm(log10(Income2005) ~ AFQT))
 summary(AFQT.lm)
+plot(resid(AFQT.lm))
 AWPM.lm = with(ex1033,lm(log10(Income2005) ~ Arith + Word + Parag + Math))
 summary(AWPM.lm)
 
@@ -64,3 +65,5 @@ anova(MAP.lm,MA.lm)
 anova(MA.lm,MAP.lm)
 anova(MA.lm,MAW.lm)
 anova(AWPM.lm,MA.lm)
+
+step(AWPM.lm, direction = "backward", test = "F")
