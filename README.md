@@ -1,2 +1,3 @@
 # R_Stat5302
-存放课堂及作业用语句
+
+Class practice and homework
