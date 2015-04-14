@@ -1,7 +1,64 @@
 setwd("I:/OSU/2015 Spring/STAT 5302/Homeworks/HW5")
 
-##question 20 
+## question 20 
+## a
 q20 = read.csv("ex1120.csv")
 head(q20)
 fit = with(q20, lm(Calcite ~ Carbonate))
 summary(fit)
+plot(q20)
+
+fit2 = with(q20,lm(Calcite ~ Carbonate, subset = (Carbonate > 22)))
+summary(fit2)
+
+fit3 = with(q20,lm(Calcite ~ Carbonate, subset = (Carbonate > 24)))
+summary(fit3)
+
+## b
+plot(q20)
+with(q20, abline(h = mean(Calcite)))
+abline(fit)
+with(q20[q20$Carbonate > 24,], abline(h = mean(Calcite), lty = 6, col = "red"))
+abline(fit3, col = "red", lty = 6)
+
+legend('bottomright', c("with outlier","without outlier") , 
+       col=c('red', 'black'), lty = c(6,1), bty='n')
+
+## c
+## leverage
+se.fit1 = predict(fit, se.fit = T)$se.fit
+sigma1 = summary(fit)$sigma
+leverage1 = (se.fit1/sigma1)^2
+leverage1
+plot(leverage1)
+
+## studres
+library(MASS)
+studres(fit)
+q20[q20$studres.outlier ==T,]
+plot(studres(fit), main = "student residual")
+
+## cook's distance
+cooks.distance(fit)
+plot(1:18, cooks.distance(fit), main = "Cook's distance")
+
+## d
+## leverage
+se.fit2 = predict(fit2, se.fit = T)$se.fit
+sigma2 = summary(fit)$sigma
+leverage2 = (se.fit2/sigma2)^2
+leverage2
+plot(leverage2)
+
+## studres
+library(MASS)
+studres(fit2)
+plot(studres(fit2), main = "student residual")
+
+## cook's distance
+cooks.distance(fit2)
+plot(1:17, cooks.distance(fit2), main = "Cook's distance")
+
+
+## question 22
+
