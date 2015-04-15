@@ -61,4 +61,45 @@ plot(1:17, cooks.distance(fit2), main = "Cook's distance")
 
 
 ## question 22
+q22 = read.csv("ex1122.csv")
+head(q22)
+pairs(q22)
 
+with(q22, cor(Deforest, Debt))
+with(q22, cor(Deforest, Pop))
+with(q22, cor(Debt, Pop))
+
+with(q22, boxcox(Deforest ~ Debt)) 
+with(q22[q22$Pop < 70000,], boxcox(Deforest ~ Debt + Pop)) 
+
+fit_Pop = with(q22, lm(Deforest ~ Pop))
+summary(fit_Pop)
+
+fit_Debt = with(q22, lm(Deforest ~ Debt))
+summary(fit_Debt)
+
+fit_DP = with(q22, lm(Deforest ~ Debt + Pop))
+summary(fit_DP)
+
+hatvalues(fit_DP)
+plot(hatvalues(fit_DP),main = "leverage")
+studres(fit_DP)
+plot(studres(fit_DP), main = "student residual")
+cooks.distance(fit_DP)
+plot(1:11, cooks.distance(fit_DP), main = "Cook's distance")
+
+fit_DP_without1 = with(q22, lm(Deforest ~ Debt + Pop, subset = (Deforest < 3000)))
+plot(hatvalues(fit_DP_without1),main = "leverage")
+plot(studres(fit_DP_without1), main = "student residual")
+plot(1:10, cooks.distance(fit_DP_without1), main = "Cook's distance")
+
+fit_DP2 = with(q22, lm(log(Deforest) ~ log(Debt) + log(Pop), subset = (Deforest<3000)))
+summary(fit_DP2)
+
+fit_Pop2 = with(q22, lm(log(Deforest) ~ log(Pop), subset = (Deforest<3000)))
+summary(fit_Pop2)
+
+fit_Debt2 = with(q22, lm(log(Deforest) ~ log(Debt), subset = (Deforest<3000)))
+summary(fit_Debt2)
+
+step(fit_DP2, direction = "backward", test = "F")
