@@ -103,3 +103,28 @@ fit_Debt2 = with(q22, lm(log(Deforest) ~ log(Debt), subset = (Deforest<3000)))
 summary(fit_Debt2)
 
 step(fit_DP2, direction = "backward", test = "F")
+
+
+## 23
+q23 = read.csv("ex1123.csv")
+head(q23)
+pairs(q23)
+fit.death = with(q23, lm(Mort ~ Precip + Educ + NonWhite + NOX + SO2))
+summary(fit.death)
+
+plot(hatvalues(fit.death),main = "leverage")
+plot(studres(fit.death), main = "student residual")
+abline(h = -2)+abline(h = 2)
+plot(1:60, cooks.distance(fit.death), main = "Cook's distance")
+
+fit.death.2 = with(q23, lm(Mort ~ Precip + Educ + NonWhite + NOX + SO2, subset = (City != 'Miami, FL')))
+summary(fit.death.2)
+
+plot(hatvalues(fit.death.2),main = "leverage")
+plot(studres(fit.death.2), main = "student residual")
+abline(h = -2, lty = 2)+abline(h = 2, lty = 2)
+plot(1:59, cooks.distance(fit.death.2), main = "Cook's distance")
+
+fit.death.3 = with(q23, lm(Mort ~ Precip + Educ + NonWhite + NOX + SO2, 
+                           subset = (City != 'Miami, FL' 'New Orleans, LA')))
+summary(fit.death.3)
