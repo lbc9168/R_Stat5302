@@ -1,4 +1,5 @@
 setwd("I:/OSU/2015 Spring/STAT 5302/Homeworks/HW5")
+load("I:/OSU/2015 Spring/STAT 5302/Homeworks/HW5/.RData")
 
 ## question 20 
 ## a
@@ -22,7 +23,11 @@ with(q20[q20$Carbonate > 24,], abline(h = mean(Calcite), lty = 6, col = "red"))
 abline(fit3, col = "red", lty = 6)
 
 legend('bottomright', c("with outlier","without outlier") , 
-       col=c('red', 'black'), lty = c(6,1), bty='n')
+       col=c('black','red'), lty = c(6,1), bty='n')
+
+anova(fit)
+anova(fit2)
+anova(fit3)
 
 ## c
 ## leverage
@@ -93,7 +98,7 @@ plot(hatvalues(fit_DP_without1),main = "leverage")
 plot(studres(fit_DP_without1), main = "student residual")
 plot(1:10, cooks.distance(fit_DP_without1), main = "Cook's distance")
 
-fit_DP2 = with(q22, lm(log(Deforest) ~ log(Debt) + log(Pop), subset = (Deforest<3000)))
+fit_DP2 = with(q22, lm(log(Deforest) ~ log(Pop) + log(Debt), subset = (Deforest<3000)))
 summary(fit_DP2)
 
 fit_Pop2 = with(q22, lm(log(Deforest) ~ log(Pop), subset = (Deforest<3000)))
@@ -101,6 +106,9 @@ summary(fit_Pop2)
 
 fit_Debt2 = with(q22, lm(log(Deforest) ~ log(Debt), subset = (Deforest<3000)))
 summary(fit_Debt2)
+
+anova(fit_DP2)
+anova(fit_Pop2)
 
 step(fit_DP2, direction = "backward", test = "F")
 
@@ -125,6 +133,17 @@ plot(studres(fit.death.2), main = "student residual")
 abline(h = -2, lty = 2)+abline(h = 2, lty = 2)
 plot(1:59, cooks.distance(fit.death.2), main = "Cook's distance")
 
-fit.death.3 = with(q23, lm(Mort ~ Precip + Educ + NonWhite + NOX + SO2, 
-                           subset = (City != 'Miami, FL' 'New Orleans, LA')))
+fit.death.3 = with(q23[q23$City != 'Miami, FL' & q23$City != 'Los Angeles, CA',], 
+                   lm(Mort ~ Precip + Educ + NonWhite + NOX + SO2))
 summary(fit.death.3)
+plot(hatvalues(fit.death.3),main = "leverage")
+plot(studres(fit.death.3), main = "student residual")
+abline(h = -2, lty = 2)+abline(h = 2, lty = 2)
+plot(1:58, cooks.distance(fit.death.3), main = "Cook's distance")
+
+## partial regression 
+step(fit.death.3, direction = "backward", test = "F")
+fit.part = with(q23[q23$City != 'Miami, FL' & q23$City != 'Los Angeles, CA',], 
+                lm(Mort ~ Precip + Educ + NonWhite + NOX))
+anova(fit.part)
+anova(fit.death.3)
