@@ -40,6 +40,26 @@ fabc = ((5250-5160)/1)/(5160/24)
 fabc
 
 
+## question 13
+# a
+fakedata = data.frame( Y = rnorm(100), matrix(rnorm(1000), nrow = 100, ncol = 10))
+fakedata
+fit = lm(Y ~ ., data = fakedata)
+summary(fit)
+
+# b
+step(fit,direction = "backward", test = "F")
+
+# c
+fit.leaps = regsubsets(Y ~ ., data = fakedata, method = "exhaustive")
+fit.leaps.sum = summary(fit.leaps)
+plot(fit.leaps.sum$cp, xlab = "No. of Exp Variable", ylab = "CP", pch = 19)
+
+#d
+plot(fit.leaps.sum$bic, xlab = "No. of Exp Variable", ylab = "CP", pch = 19)
+
+
+
 ## question 17
 ## a
 # Model selection
@@ -56,15 +76,50 @@ plot(M.sum$bic, xlab = "No. of Para", ylab = "BIC", pch = 19)
 M.sum
 
 # reduced model and full model
-Mortality.reduced.lm = lm(Mortality ~ Precip + JanTemp + JulyTemp + Educ + NonWhite + SO2,
+Mortality.reduced.lm = lm(Mortality ~ Precip + JanTemp + Educ + NonWhite + SO2,
                           data = q17)
 summary(Mortality.reduced.lm)
 
-Mortality.full.lm = lm(Mortality ~ Precip + JanTemp + JulyTemp + Educ + NonWhite + HC + NOX + SO2 ,
+Mortality.full.lm = lm(Mortality ~ Precip + JanTemp + Educ + NonWhite + HC + NOX + SO2 ,
                           data = q17)
 summary(Mortality.full.lm)
+
+Mortality.run = lm(Mortality ~ Precip + JanTemp + JulyTemp + House + Educ + NonWhite + HC + NOX, data =q17)
+summary(Mortality.run)
 
 anova(Mortality.reduced.lm, Mortality.full.lm)
 
 ## b
 step(Mortality.lm, direction = "backward", test = "F")
+
+
+
+## question 20
+pairs(q20)
+q20 = read.csv("ex1220.csv")
+
+island.lm = lm(Total ~ . - Island, data = q20)
+summary(island.lm)
+
+with(q20, plot(Area, Total))
+
+hatvalues(island.lm)
+plot(hatvalues(island.lm))
+abline(h = 2 * mean(hatvalues(island.lm)))
+
+plot(rstudent(island.lm))
+abline(h = 2) + abline(h = -2)
+
+plot(cooks.distance(island.lm))
+island.lm.new = with(q20, lm(Total ~ Native + Area + Elev + DistNear + DistSc + AreaNear, subset = (Area < 4000)))
+summary(island.lm.new)
+
+library(leaps)
+island.leaps = regsubsets(Total ~ Native + Area + Elev + DistNear + DistSc + AreaNear, subset = (Area < 4000),
+                          data = q20, method = "exhaustive")
+island.leaps.sum = summary(island.leaps)
+plot(island.leaps.sum$cp, xlab = "No. of Exp Variable", ylab = "CP", pch = 19)
+plot(island.leaps.sum$bic, xlab = "No. of Exp Variable", ylab = "BIC", pch = 19)
+
+island.lm.adj = with(q20, lm(Total ~ Native + Area + Elev, subset = (Area < 4000)))
+summary(island.lm.adj)
