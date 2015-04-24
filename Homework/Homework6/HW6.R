@@ -64,11 +64,11 @@ plot(fit.leaps.sum$bic, xlab = "No. of Exp Variable", ylab = "CP", pch = 19)
 ## a
 # Model selection
 q17 = read.csv("ex1217.csv")
-Mortality.lm = lm(Mortality ~ . - CITY, data = q17)
+Mortality.lm = lm(Mortality ~ . - CITY - HC - NOX - SO2, data = q17)
 summary(Mortality.lm)
 
 library(leaps)
-M = regsubsets(Mortality ~ . - CITY, data = q17, method = "exhaustive")
+M = regsubsets(Mortality ~ . - CITY - HC - NOX - SO2, data = q17, method = "exhaustive")
 M.sum = summary(M)
 
 plot(M.sum$cp, xlab = "No. of Para", ylab = "CP", pch = 19)
@@ -76,12 +76,12 @@ plot(M.sum$bic, xlab = "No. of Para", ylab = "BIC", pch = 19)
 M.sum
 
 # reduced model and full model
-Mortality.reduced.lm = lm(Mortality ~ Precip + JanTemp + Educ + NonWhite + SO2,
+Mortality.reduced.lm = lm(Mortality ~ Precip + JanTemp + JulyTemp + Educ + Density + NonWhite ,
                           data = q17)
 summary(Mortality.reduced.lm)
 
-Mortality.full.lm = lm(Mortality ~ Precip + JanTemp + Educ + NonWhite + HC + NOX + SO2 ,
-                          data = q17)
+Mortality.full.lm = lm(Mortality ~ Precip + JanTemp + JulyTemp + Educ + Density + NonWhite + 
+                       log(HC) + log(NOX) + log(SO2), data = q17)
 summary(Mortality.full.lm)
 
 Mortality.run = lm(Mortality ~ Precip + JanTemp + JulyTemp + House + Educ + NonWhite + HC + NOX, data =q17)
